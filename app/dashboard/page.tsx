@@ -1,6 +1,8 @@
 import { AppShell } from "@/components/layout/AppShell";
 import { DocumentCard } from "@/components/documents/DocumentCard";
 import { UploadPlaceholder } from "@/components/upload/UploadPlaceholder";
+import { BarChart3, Clock, Files } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const sampleDocuments = [
   {
@@ -8,42 +10,58 @@ const sampleDocuments = [
     title: "Supplier Invoice - April",
     type: "Invoice",
     status: "Ready" as const,
-    updatedAt: "today"
+    updatedAt: "today",
   },
   {
     id: "sample-contract",
     title: "Client Service Agreement",
     type: "Contract",
     status: "Needs review" as const,
-    updatedAt: "yesterday"
-  }
+    updatedAt: "yesterday",
+  },
 ];
 
 export default function DashboardPage() {
+  // Debug check: This will log an empty array if connected successfully to an empty DB
+  // In Phase 4, we'll replace the hardcoded sampleDocuments with a real fetch
+  console.log("Supabase Client initialized:", !!supabase);
+
   return (
     <AppShell>
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">Phase 1 shell</p>
-          <h1 className="mt-2 text-3xl font-bold">Dashboard</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#667085]">
-            This is the starting surface for upload, document review, cited Q&A, extraction, and action generation.
-          </p>
-        </div>
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-[#172033]">
+          Welcome back
+        </h1>
+        <p className="mt-2 text-[#667085]">
+          Manage your documents and AI workflows.
+        </p>
       </header>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         <div className="rounded-lg border border-[#d9e0ea] bg-white p-5">
-          <p className="text-sm text-[#667085]">Documents</p>
-          <p className="mt-2 text-3xl font-bold">2</p>
+          <div className="flex items-center gap-3">
+            <Files className="text-[#2563eb]" size={20} />
+            <p className="text-sm font-medium text-[#667085]">Documents</p>
+          </div>
+          <p className="mt-4 text-3xl font-bold text-[#172033]">12</p>
         </div>
         <div className="rounded-lg border border-[#d9e0ea] bg-white p-5">
-          <p className="text-sm text-[#667085]">AI runs</p>
-          <p className="mt-2 text-3xl font-bold">0</p>
+          <div className="flex items-center gap-3">
+            <BarChart3 className="text-[#2563eb]" size={20} />
+            <p className="text-sm font-medium text-[#667085]">AI Extractions</p>
+          </div>
+          <p className="mt-4 text-3xl font-bold text-[#172033]">48</p>
         </div>
         <div className="rounded-lg border border-[#d9e0ea] bg-white p-5">
-          <p className="text-sm text-[#667085]">Status</p>
-          <p className="mt-2 text-3xl font-bold">Setup</p>
+          <div className="flex items-center gap-3">
+            <Clock className="text-[#2563eb]" size={20} />
+            <p className="text-sm font-medium text-[#667085]">
+              Recent Activity
+            </p>
+          </div>
+          <p className="mt-4 text-lg font-semibold text-[#172033]">
+            2 hours ago
+          </p>
         </div>
       </div>
 

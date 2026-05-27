@@ -2,23 +2,21 @@ import { UploadCloud } from "lucide-react";
 
 export function UploadPlaceholder() {
   return (
-    <section id="upload" className="rounded-lg border border-dashed border-[#b8c4d6] bg-white p-6">
-      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-start gap-4">
-          <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#eef4ff] text-[#2563eb]">
-            <UploadCloud size={23} />
-          </span>
-          <div>
-            <h2 className="text-base font-semibold">Upload documents</h2>
-            <p className="mt-1 max-w-2xl text-sm text-[#667085]">
-              Phase 2 will connect this area to Supabase Storage and the PDF parser. For now it marks the product flow.
-            </p>
-          </div>
-        </div>
-        <button className="rounded-md bg-[#2563eb] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#1d4ed8]">
-          Upload PDF
-        </button>
+    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#d9e0ea] bg-white py-12 text-center hover:border-[#2563eb] transition-colors cursor-pointer">
+      <div className="rounded-full bg-[#f2f4f7] p-3 text-[#475467]">
+        <UploadCloud size={28} />
       </div>
-    </section>
+      <div className="mt-4">
+        <p className="text-sm font-semibold text-[#172033]">
+          Click to upload or drag and drop
+        </p>
+        <p className="mt-1 text-xs text-[#667085]">
+          PDF, DOCX, or Images (up to 10MB)
+        </p>
+      </div>
+      <button className="mt-6 rounded-md bg-[#2563eb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1d4ed8]">
+        Select files
+      </button>
+    </div>
   );
 }
