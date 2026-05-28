@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, MoreVertical } from "lucide-react";
+import { FileText } from "lucide-react";
 
 interface DocumentCardProps {
   id: string;
@@ -28,7 +28,7 @@ export function DocumentCard({
         <div>
           <h3 className="font-semibold text-[#172033]">{title}</h3>
           <p className="text-xs text-[#667085]">
-            {type} • Updated {updatedAt}
+            {type} - Updated {updatedAt}
           </p>
         </div>
       </div>
