@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { DocumentCard } from "@/components/documents/DocumentCard";
 import FileUpload from "@/components/upload/FileUpload";
 import { BarChart3, Clock, Files } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { getSupabaseConfigError, supabase } from "@/lib/supabase";
 
 type DocumentStatus = "Ready" | "Needs review";
 
@@ -44,6 +44,33 @@ function formatDocuments(
   }));
 }
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === "object" && error !== null) {
+    const maybeError = error as {
+      message?: string;
+      error_description?: string;
+      details?: string;
+      hint?: string;
+      code?: string;
+    };
+
+    return (
+      maybeError.message ??
+      maybeError.error_description ??
+      maybeError.details ??
+      maybeError.hint ??
+      maybeError.code ??
+      JSON.stringify(error)
+    );
+  }
+
+  return String(error);
+}
+
 export default function DashboardPage() {
   const [documents, setDocuments] = useState<DashboardDocument[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,14 +80,23 @@ export default function DashboardPage() {
     setLoading(true);
     setError(null);
 
+    const configError = getSupabaseConfigError();
+    if (configError) {
+      setError(configError);
+      setDocuments([]);
+      setLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase
       .from("documents")
       .select("*")
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching documents:", error);
-      setError(error.message);
+      const message = getErrorMessage(error);
+      console.error("Error fetching documents:", message, error);
+      setError(message);
       setDocuments([]);
     } else {
       setDocuments(formatDocuments(data));
@@ -73,6 +109,14 @@ export default function DashboardPage() {
     let cancelled = false;
 
     const loadInitialDocuments = async () => {
+      const configError = getSupabaseConfigError();
+      if (configError) {
+        setError(configError);
+        setDocuments([]);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("documents")
         .select("*")
@@ -81,8 +125,9 @@ export default function DashboardPage() {
       if (cancelled) return;
 
       if (error) {
-        console.error("Error fetching documents:", error);
-        setError(error.message);
+        const message = getErrorMessage(error);
+        console.error("Error fetching documents:", message, error);
+        setError(message);
         setDocuments([]);
       } else {
         setDocuments(formatDocuments(data));

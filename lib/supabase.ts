@@ -1,9 +1,28 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-// Create a single supabase client for interacting with your database
+export function getSupabaseConfigError() {
+  if (!supabaseUrl) {
+    return "Missing NEXT_PUBLIC_SUPABASE_URL in .env.local.";
+  }
+
+  if (!supabaseAnonKey) {
+    return "Missing NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.";
+  }
+
+  if (!supabaseUrl.startsWith("https://") || !supabaseUrl.includes(".supabase.co")) {
+    return "NEXT_PUBLIC_SUPABASE_URL should look like https://your-project-ref.supabase.co.";
+  }
+
+  if (!supabaseAnonKey.startsWith("eyJ") || supabaseAnonKey.length < 100) {
+    return "NEXT_PUBLIC_SUPABASE_ANON_KEY does not look like a valid Supabase anon public key. Copy the full anon public key from Supabase Project Settings > API.";
+  }
+
+  return null;
+}
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 
